@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY k8s_monitor/ ./k8s_monitor/
+
+# Copy main.py from root to run directly
+COPY main.py .
+
+# Ensure __init__.py exists
+RUN touch k8s_monitor/__init__.py
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+CMD ["python", "main.py"]

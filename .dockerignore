@@ -1,0 +1,25 @@
+# Ignore Python cache, local env, VCS and editor files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+
+# Environment files
+.env
+.env.*
+
+# Kubernetes local files
+.kube/
+
+# VCS
+.git/
+.gitignore
+
+# Editor/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

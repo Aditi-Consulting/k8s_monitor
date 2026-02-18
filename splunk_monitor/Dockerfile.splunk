@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY splunk_monitor/ ./splunk_monitor/
+COPY k8s_monitor/emailer.py ./k8s_monitor/emailer.py
+COPY k8s_monitor/config.py ./k8s_monitor/config.py
+COPY k8s_monitor/__init__.py ./k8s_monitor/__init__.py
+
+# Create __init__.py files if needed
+RUN touch splunk_monitor/__init__.py k8s_monitor/__init__.py
+
+EXPOSE 5002
+
+CMD ["python", "-m", "splunk_monitor.main"]
