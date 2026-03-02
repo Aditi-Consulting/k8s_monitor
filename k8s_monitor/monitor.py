@@ -10,7 +10,6 @@ from kubernetes.client import ApiException
 from .config import config
 from .state import ClusterSnapshot, diff_snapshots, EMPTY_SNAPSHOT
 from .emailer import emailer
-from .alerts import alert_client
 from .conditions import evaluate_alert_rules
 
 logger = logging.getLogger(__name__)
@@ -103,12 +102,12 @@ class K8sMonitor:
         return ClusterSnapshot(pods=pods, pod_reasons=pod_reasons, services=services, deployments=deployments)
 
     def _check_and_alert_replicas(self, current: ClusterSnapshot, previous: ClusterSnapshot):
-        # Deprecated direct logic replaced by rule engine usage.
+        # Rules already handle alert creation + email via _send_alert_and_email_parallel,
+        # so we only call evaluate_alert_rules here for logging/tracking.
         events = evaluate_alert_rules(previous, current)
-        for ev in events:
-            emailer.send(subject=ev.subject, lines=[ev.message])
-            from .alerts import alert_client  # local import to avoid circular at module load
-            alert_client.post_alert(created_by=config.alert_created_by, severity=ev.severity, ticket_message=ev.message)
+        if events:
+            logger.info("Alert rules produced %d event(s): %s", len(events),
+                        ", ".join(ev.key for ev in events))
 
     def poll_once(self) -> None:
         current = self._snapshot()

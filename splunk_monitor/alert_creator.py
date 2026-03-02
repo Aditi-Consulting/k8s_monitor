@@ -28,11 +28,9 @@ class AlertCreator:
 
 
     def _new_ticket_id(self) -> str:
-        """Generate unique ticket ID in format: SPLUNK-xxxxxx."""
-        prefix = "SPLUNK-"
+        """Generate unique random 12-char alphanumeric ticket ID."""
         alphabet = string.ascii_lowercase + string.digits
-        tail = ''.join(secrets.choice(alphabet) for _ in range(6))
-        return prefix + tail
+        return ''.join(secrets.choice(alphabet) for _ in range(12))
 
     def run_alert_flow(
         self,
@@ -84,6 +82,7 @@ class AlertCreator:
             "ticketId": ticket_id,
             "createdBy": splunk_config.alert_created_by,
             "severity": llm_analysis.get("severity", "medium"),
+            "source": "Splunk",
 
             # SIGNAL (clean, LLM-generated operational alert)
             "ticket": ticket_message,
