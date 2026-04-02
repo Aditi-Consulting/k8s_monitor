@@ -177,15 +177,15 @@ class AlertCreator:
             return False
 
     def _solve_alert(self, alert_id: int) -> bool:
-        """Stage 3: Solving / Task Agent (with duplicate prevention)."""
+        """Stage 3: Solving / Task Agent — direct call to splunk agent."""
         if alert_id in self._processed_alert_ids:
             logger.debug("[Splunk Monitor] [Task Agent] Skipping duplicate solve for alertId=%s", alert_id)
             return True
 
-        url = f"{self.base_host}/api/v1/client/trigger-task-agent?alertId={alert_id}"
+        url = f"{splunk_config.splunk_task_agent_url}?alertId={alert_id}"
         headers = {"Content-Type": "application/json"}
-        logger.info("[Splunk Monitor] [Task Agent] Triggering task agent for alertId=%s", alert_id)
-        logger.debug("[Splunk Monitor] [Task Agent] POST %s", url)
+        logger.info("[Splunk Monitor] [Task Agent] Triggering splunk agent for alertId=%s", alert_id)
+        logger.info("[Splunk Monitor] [Task Agent] URL: %s", url)
 
         try:
             resp = requests.post(url, headers=headers, timeout=splunk_config.task_agent_timeout_seconds)

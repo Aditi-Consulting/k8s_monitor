@@ -42,6 +42,9 @@ class SplunkConfig:
     classification_timeout_seconds: int = int(os.getenv("CLASSIFICATION_TIMEOUT_SECONDS", "10"))
     task_agent_timeout_seconds: int = int(os.getenv("TASK_AGENT_TIMEOUT_SECONDS", "15"))
 
+    # Splunk task agent URL (custom, direct call instead of going through api-service)
+    splunk_task_agent_url: str = os.getenv("SPLUNK_TASK_AGENT_URL", "http://host.docker.internal:5004/api/v1/splunk-agent")
+
     # Email settings (reuse from k8s_monitor)
     email_user: str = os.getenv("EMAIL_USER", "")
     email_receiver: str = os.getenv("EMAIL_RECEIVER", "")
