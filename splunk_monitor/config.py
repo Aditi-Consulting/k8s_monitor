@@ -34,6 +34,8 @@ class SplunkConfig:
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
     openai_timeout: int = int(os.getenv("OPENAI_TIMEOUT", "30"))  # Increased from 10 to 30 seconds
+    azure_openai_endpoint: str = os.getenv("AZURE_OPENAI_ENDPOINT", "")
+    azure_openai_api_version: str = os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
 
     # Alert API configuration (same as k8s)
     alert_api_url: str = os.getenv("ALERT_API_URL", "http://localhost:3002/api/v1/alerts")

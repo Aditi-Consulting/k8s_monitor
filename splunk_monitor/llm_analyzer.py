@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 import re
 from typing import Dict, Any
-from openai import OpenAI
+from openai import AzureOpenAI, OpenAI
 
 from .config import splunk_config
 from .api_client import ApplicationException
@@ -21,6 +21,12 @@ class LLMAnalyzer:
                 "[Splunk Monitor] OpenAI API key not configured; LLM analysis will be disabled"
             )
             self.client = None
+        elif splunk_config.azure_openai_endpoint:
+            self.client = AzureOpenAI(
+                api_key=splunk_config.openai_api_key,
+                azure_endpoint=splunk_config.azure_openai_endpoint,
+                api_version=splunk_config.azure_openai_api_version,
+            )
         else:
             self.client = OpenAI(api_key=splunk_config.openai_api_key)
 
